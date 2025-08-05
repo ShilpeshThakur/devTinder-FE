@@ -10,12 +10,10 @@ const Connections = () => {
     const dispatch = useDispatch();
     const fetchConnections = async () =>{
         try{
-            console.log("efsaf");
             const res = await axios.get(
                 BASE_URL+"/user/connections",
                 {withCredentials:true}
             );
-            console.log(res)
             dispatch(addConnections(res?.data?.data))
         }catch(err){
                 //handle error case
@@ -35,10 +33,10 @@ const Connections = () => {
         <h1 className="text-bold text-white text-4xl">connection</h1>
 
         {connections.map((connection)=>{
-            const { firstName, lastName, photoUrl, age, gender, about} = connection
+            const { _id, firstName, lastName, photoUrl, age, gender, about} = connection
 
             return (
-                <div className="flex m-4 p-4 rounded bg-base-300 w-1/2 mx-auto">
+                <div key={_id} className="flex m-4 p-4 rounded bg-base-300 w-1/2 mx-auto">
                     <div>
                           <img alt="photo" className="w-20 h-20" src={photoUrl}/>
                     </div>
