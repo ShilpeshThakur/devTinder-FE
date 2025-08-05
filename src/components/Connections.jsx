@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import { BASE_URL } from "../utils/constant"
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
@@ -6,6 +6,7 @@ import { addConnections } from "../utils/connectionSlice";
 
 const Connections = () => {
 
+    const [error,setError] = useState("");
     const connections = useSelector((store)=> store.connection);
     const dispatch = useDispatch();
     const fetchConnections = async () =>{
@@ -16,7 +17,9 @@ const Connections = () => {
             );
             dispatch(addConnections(res?.data?.data))
         }catch(err){
-                //handle error case
+            console.log(err);
+            //handle error case
+            setError(err?.response?.data || "Something went wrong.");
         }
     }
 
@@ -26,7 +29,7 @@ const Connections = () => {
 
     if(!connections) return;
 
-    if(connections.length === 0) return; <h1 className="text-bold text-2xl">No connections found.</h1>
+    if(connections.length === 0) return <h1 className="flex justify-center my-10">No connections found.</h1>;
     
   return (
     <div className="text-center my-10">
@@ -38,7 +41,7 @@ const Connections = () => {
             return (
                 <div key={_id} className="flex m-4 p-4 rounded bg-base-300 w-1/2 mx-auto">
                     <div>
-                          <img alt="photo" className="w-20 h-20" src={photoUrl}/>
+                          <img alt="photo" className="w-20 h-20 rounded-full object-cover" src={photoUrl}/>
                     </div>
                     <div className="text-left mx-4">
                         <h2 className="font-bold text-xl">{firstName + " " + lastName} </h2>
@@ -48,6 +51,7 @@ const Connections = () => {
                 </div>
             )
         })}
+        <p className="text-red-500">{error}</p>
     </div>
   )
 }
